@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validación de Documento – SisDoc QR</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-primary py-3 shadow-sm">
+  <div class="container">
+    <span class="navbar-brand fw-bold">
+      <i class="bi bi-file-earmark-check-fill me-1"></i>SisDoc QR – Verificación de Documento
+    </span>
+  </div>
+</nav>
+
+<div class="container py-5" style="max-width:640px">
+  <% if (!doc) { %>
+  <!-- NOT FOUND -->
+  <div class="card shadow border-0 text-center py-5">
+    <div class="card-body">
+      <div class="validate-icon bg-secondary-subtle rounded-circle mx-auto mb-3">
+        <i class="bi bi-question-circle text-secondary"></i>
+      </div>
+      <h3 class="fw-bold text-secondary">Documento no encontrado</h3>
+      <p class="text-muted mb-3">No existe ningún documento con el folio <strong><%= folio %></strong> en nuestra plataforma.</p>
+      <span class="badge bg-secondary fs-6 px-4 py-2">NO REGISTRADO</span>
+    </div>
+  </div>
+
+  <% } else if (doc.status === 'vigente') { %>
+  <!-- VIGENTE -->
+  <div class="card shadow border-0 text-center py-4 border-success border-2">
+    <div class="card-body">
+      <div class="validate-icon bg-success-subtle rounded-circle mx-auto mb-3">
+        <i class="bi bi-patch-check-fill text-success"></i>
+      </div>
+      <h3 class="fw-bold text-success">Documento Vigente</h3>
+      <p class="text-muted">Este documento está registrado y se encuentra vigente en la plataforma.</p>
+      <span class="badge bg-success fs-6 px-4 py-2 mb-4">VIGENTE</span>
+      <hr>
+      <div class="text-start mt-3"><%- docTable(doc) %></div>
+    </div>
+  </div>
+
+  <% } else if (doc.status === 'revocado') { %>
+  <!-- REVOCADO -->
+  <div class="card shadow border-0 text-center py-4 border-warning border-2">
+    <div class="card-body">
+      <div class="validate-icon bg-warning-subtle rounded-circle mx-auto mb-3">
+        <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+      </div>
+      <h3 class="fw-bold text-warning">Documento Revocado</h3>
+      <p class="text-muted">Este documento ha sido <strong>revocado</strong> y ya no tiene validez oficial.</p>
+      <span class="badge bg-warning text-dark fs-6 px-4 py-2 mb-4">REVOCADO</span>
+      <% if (doc.revoked_reason) { %>
+      <div class="alert alert-warning text-start">
+        <strong>Motivo de revocación:</strong> <%= doc.revoked_reason %>
+      </div>
+      <% } %>
+      <hr>
+      <div class="text-start mt-3"><%- docTable(doc) %></div>
+    </div>
+  </div>
+
+  <% } else { %>
+  <!-- CANCELADO -->
+  <div class="card shadow border-0 text-center py-4 border-danger border-2">
+    <div class="card-body">
+      <div class="validate-icon bg-danger-subtle rounded-circle mx-auto mb-3">
+        <i class="bi bi-x-circle-fill text-danger"></i>
+      </div>
+      <h3 class="fw-bold text-danger">Documento Cancelado</h3>
+      <p class="text-muted">Este documento ha sido <strong>cancelado</strong> y no tiene validez.</p>
+      <span class="badge bg-danger fs-6 px-4 py-2 mb-4">CANCELADO</span>
+      <% if (doc.revoked_reason) { %>
+      <div class="alert alert-danger text-start">
+        <strong>Motivo de cancelación:</strong> <%= doc.revoked_reason %>
+      </div>
+      <% } %>
+      <hr>
+      <div class="text-start mt-3"><%- docTable(doc) %></div>
+    </div>
+  </div>
+  <% } %>
+
+  <p class="text-center text-muted small mt-4">
+    <i class="bi bi-shield-lock me-1"></i>
+    Verificación realizada el <%= new Date().toLocaleString('es-MX') %> · SisDoc QR
+  </p>
+</div>
+
+<%
+function docTable(d) {
+  return `<table class="table table-sm table-borderless mb-0">
+    <tr><th class="text-muted w-40">Folio</th><td><code class="text-primary fw-bold">${d.folio}</code></td></tr>
+    <tr><th class="text-muted">Título</th><td>${d.title}</td></tr>
+    <tr><th class="text-muted">Tipo</th><td>${d.document_type}</td></tr>
+    <tr><th class="text-muted">Área emisora</th><td>${d.issuing_area}</td></tr>
+    <tr><th class="text-muted">Fecha de registro</th><td>${new Date(d.created_at).toLocaleDateString('es-MX')}</td></tr>
+  </table>`;
+}
+%>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

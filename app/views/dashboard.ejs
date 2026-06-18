@@ -1,0 +1,124 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="container-fluid py-4 px-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="mb-0 fw-bold"><i class="bi bi-speedometer2 me-2 text-primary"></i>Panel Principal</h4>
+      <small class="text-muted">Bienvenido, <%= session.userName %></small>
+    </div>
+    <a href="/documents/upload" class="btn btn-primary">
+      <i class="bi bi-cloud-upload me-1"></i>Subir Documento
+    </a>
+  </div>
+
+  <% if (flash) { %>
+  <div class="alert alert-<%= flash.type === 'error' ? 'danger' : 'success' %> alert-dismissible fade show">
+    <%= flash.message %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  <% } %>
+
+  <!-- Stats cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="card stat-card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="stat-icon bg-primary-subtle text-primary rounded-circle mx-auto mb-2">
+            <i class="bi bi-files fs-4"></i>
+          </div>
+          <h2 class="fw-bold mb-0"><%= stats.total || 0 %></h2>
+          <small class="text-muted">Total documentos</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card stat-card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="stat-icon bg-success-subtle text-success rounded-circle mx-auto mb-2">
+            <i class="bi bi-check-circle fs-4"></i>
+          </div>
+          <h2 class="fw-bold mb-0 text-success"><%= stats.vigentes || 0 %></h2>
+          <small class="text-muted">Vigentes</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card stat-card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="stat-icon bg-warning-subtle text-warning rounded-circle mx-auto mb-2">
+            <i class="bi bi-exclamation-triangle fs-4"></i>
+          </div>
+          <h2 class="fw-bold mb-0 text-warning"><%= stats.revocados || 0 %></h2>
+          <small class="text-muted">Revocados</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="card stat-card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <div class="stat-icon bg-danger-subtle text-danger rounded-circle mx-auto mb-2">
+            <i class="bi bi-x-circle fs-4"></i>
+          </div>
+          <h2 class="fw-bold mb-0 text-danger"><%= stats.cancelados || 0 %></h2>
+          <small class="text-muted">Cancelados</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent documents -->
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+      <h6 class="mb-0 fw-semibold"><i class="bi bi-clock-history me-2 text-primary"></i>Documentos Recientes</h6>
+      <a href="/documents" class="btn btn-sm btn-outline-primary">Ver todos</a>
+    </div>
+    <div class="card-body p-0">
+      <% if (!recent.length) { %>
+      <div class="text-center py-5 text-muted">
+        <i class="bi bi-inbox fs-1 d-block mb-2"></i>No hay documentos registrados aún.
+      </div>
+      <% } else { %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Folio</th><th>Título</th><th>Tipo</th><th>Área</th><th>Fecha</th><th>Estado</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% recent.forEach(doc => { %>
+            <tr>
+              <td><code class="text-primary"><%= doc.folio %></code></td>
+              <td class="fw-semibold"><%= doc.title %></td>
+              <td><span class="badge bg-light text-dark border"><%= doc.document_type %></span></td>
+              <td><%= doc.issuing_area %></td>
+              <td><%= new Date(doc.created_at).toLocaleDateString('es-MX') %></td>
+              <td><%- statusBadge(doc.status) %></td>
+              <td>
+                <a href="/documents/<%= doc.folio %>" class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-eye"></i>
+                </a>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<%
+function statusBadge(s) {
+  const map = {
+    vigente:   '<span class="badge bg-success">Vigente</span>',
+    revocado:  '<span class="badge bg-warning text-dark">Revocado</span>',
+    cancelado: '<span class="badge bg-danger">Cancelado</span>',
+  };
+  return map[s] || s;
+}
+%>
+</body></html>
