@@ -1,0 +1,7 @@
+node_modules/
+app/uploads/originals/*
+app/uploads/qr/*
+app/uploads/with-qr/*
+!app/uploads/originals/.gitkeep
+!app/uploads/qr/.gitkeep
+!app/uploads/with-qr/.gitkeep

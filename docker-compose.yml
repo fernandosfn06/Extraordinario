@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./app
+    container_name: docvalidation_app
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=database
+      - DB_USER=docuser
+      - DB_PASSWORD=docpass123
+      - DB_NAME=docvalidation
+      - SESSION_SECRET=clave_secreta_sisdoc_2024
+      - BASE_URL=http://localhost:3000
+    volumes:
+      - ./app/uploads:/app/uploads
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - docnet
+
+  database:
+    image: mysql:8.0
+    container_name: docvalidation_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass123
+      - MYSQL_DATABASE=docvalidation
+      - MYSQL_USER=docuser
+      - MYSQL_PASSWORD=docpass123
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpass123"]
+      interval: 5s
+      timeout: 10s
+      retries: 15
+    restart: unless-stopped
+    networks:
+      - docnet
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: docvalidation_pma
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=database
+      - PMA_USER=root
+      - PMA_PASSWORD=rootpass123
+    depends_on:
+      - database
+    restart: unless-stopped
+    networks:
+      - docnet
+
+volumes:
+  db_data:
+
+networks:
+  docnet:
+    driver: bridge
