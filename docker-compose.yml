@@ -12,12 +12,21 @@ services:
       - DB_PASSWORD=docpass123
       - DB_NAME=docvalidation
       - SESSION_SECRET=clave_secreta_sisdoc_2024
-      - BASE_URL=http://localhost:3000
     volumes:
       - ./app/uploads:/app/uploads
     depends_on:
       database:
         condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - docnet
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: docvalidation_tunnel
+    command: tunnel --url http://app:3000 --metrics 0.0.0.0:20241
+    depends_on:
+      - app
     restart: unless-stopped
     networks:
       - docnet

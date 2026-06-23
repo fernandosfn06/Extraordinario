@@ -7,6 +7,7 @@ const { pool } = require('../config/db');
 const { generateFolio }    = require('../helpers/folio');
 const { generateQRCode }   = require('../helpers/qr');
 const { insertQRIntoPDF, saveQRPDF } = require('../helpers/pdf');
+const { getBaseUrl } = require('../helpers/publicUrl');
 
 // ── Multer (memory storage, validates PDF only) ──────────────────────────────
 const upload = multer({
@@ -75,7 +76,7 @@ router.post('/upload', handleUpload, async (req, res) => {
   }
 
   const folio   = generateFolio();
-  const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+  const baseUrl = await getBaseUrl(req);
   const valUrl  = `${baseUrl}/validate/${folio}`;
 
   try {
@@ -134,7 +135,7 @@ router.get('/:folio', async (req, res) => {
       return res.redirect('/documents');
     }
     const doc     = rows[0];
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+    const baseUrl = await getBaseUrl(req);
     const flash   = req.session.flash; delete req.session.flash;
     res.render('document-detail', { doc, baseUrl, flash, title: `Documento ${doc.folio}` });
   } catch (err) {
