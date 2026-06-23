@@ -1,3 +1,4 @@
+<% const activeNav = typeof active !== 'undefined' ? active : ''; %>
 <header class="bg-surface-container-lowest fixed top-0 w-full z-50 shadow-sm">
   <div class="flex items-center justify-between px-margin-mobile md:px-margin-desktop w-full max-w-container-max mx-auto h-16">
     <div class="flex items-center gap-stack-lg">
@@ -6,9 +7,9 @@
         <span class="font-headline-md text-headline-md font-bold text-primary hidden sm:inline">DocuValidate</span>
       </a>
       <nav class="hidden md:flex items-center gap-gutter">
-        <a href="/dashboard" class="font-label-md text-label-md pb-1 transition-colors duration-200 <%= active === 'dashboard' ? 'text-primary border-b-2 border-primary' : 'text-secondary hover:text-primary' %>">Panel</a>
-        <a href="/documents" class="font-label-md text-label-md pb-1 transition-colors duration-200 <%= active === 'documents' ? 'text-primary border-b-2 border-primary' : 'text-secondary hover:text-primary' %>">Documentos</a>
-        <a href="/documents/upload" class="font-label-md text-label-md pb-1 transition-colors duration-200 <%= active === 'upload' ? 'text-primary border-b-2 border-primary' : 'text-secondary hover:text-primary' %>">Subir</a>
+        <a href="/dashboard" class="font-label-md text-label-md pb-1 transition-colors duration-200 <%= activeNav === 'dashboard' ? 'text-primary border-b-2 border-primary' : 'text-secondary hover:text-primary' %>">Panel</a>
+        <a href="/documents" class="font-label-md text-label-md pb-1 transition-colors duration-200 <%= activeNav === 'documents' ? 'text-primary border-b-2 border-primary' : 'text-secondary hover:text-primary' %>">Documentos</a>
+        <a href="/documents/upload" class="font-label-md text-label-md pb-1 transition-colors duration-200 <%= activeNav === 'upload' ? 'text-primary border-b-2 border-primary' : 'text-secondary hover:text-primary' %>">Subir</a>
       </nav>
     </div>
     <div class="flex items-center gap-stack-md">

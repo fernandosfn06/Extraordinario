@@ -137,7 +137,7 @@ router.get('/:folio', async (req, res) => {
     const doc     = rows[0];
     const baseUrl = await getBaseUrl(req);
     const flash   = req.session.flash; delete req.session.flash;
-    res.render('document-detail', { doc, baseUrl, flash, title: `Documento ${doc.folio}` });
+    res.render('document-detail', { doc, baseUrl, flash, title: `Documento ${doc.folio}`, active: 'documents' });
   } catch (err) {
     console.error(err);
     res.redirect('/documents');
