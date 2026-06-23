@@ -49,17 +49,17 @@ router.get('/', async (req, res) => {
 
     const [documents] = await pool.query(sql, params);
     const flash = req.session.flash; delete req.session.flash;
-    res.render('documents', { documents, flash, search, status, title: 'Repositorio de Documentos' });
+    res.render('documents', { documents, flash, search, status, title: 'Repositorio de Documentos', active: 'documents' });
   } catch (err) {
     console.error(err);
-    res.render('documents', { documents: [], flash: null, search, status, title: 'Repositorio de Documentos' });
+    res.render('documents', { documents: [], flash: null, search, status, title: 'Repositorio de Documentos', active: 'documents' });
   }
 });
 
 // ── GET /documents/upload ────────────────────────────────────────────────────
 router.get('/upload', (req, res) => {
   const flash = req.session.flash; delete req.session.flash;
-  res.render('upload', { flash, title: 'Subir Documento' });
+  res.render('upload', { flash, title: 'Subir Documento', active: 'upload' });
 });
 
 // ── POST /documents/upload ───────────────────────────────────────────────────

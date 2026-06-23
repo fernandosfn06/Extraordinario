@@ -19,10 +19,10 @@ router.get('/', async (req, res) => {
        ORDER BY d.created_at DESC LIMIT 5`
     );
     const flash = req.session.flash; delete req.session.flash;
-    res.render('dashboard', { stats, recent, flash, title: 'Panel Principal' });
+    res.render('dashboard', { stats, recent, flash, title: 'Panel Principal', active: 'dashboard' });
   } catch (err) {
     console.error(err);
-    res.render('dashboard', { stats: { total:0, vigentes:0, revocados:0, cancelados:0 }, recent: [], flash: null, title: 'Panel Principal' });
+    res.render('dashboard', { stats: { total:0, vigentes:0, revocados:0, cancelados:0 }, recent: [], flash: null, title: 'Panel Principal', active: 'dashboard' });
   }
 });
 

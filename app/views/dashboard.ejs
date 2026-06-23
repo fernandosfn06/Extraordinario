@@ -1,122 +1,134 @@
 <%- include('partials/head') %>
 <%- include('partials/navbar') %>
 
-<div class="container-fluid py-4 px-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h4 class="mb-0 fw-bold"><i class="bi bi-speedometer2 me-2 text-primary"></i>Panel Principal</h4>
-      <small class="text-muted">Bienvenido, <%= session.userName %></small>
-    </div>
-    <a href="/documents/upload" class="btn btn-primary">
-      <i class="bi bi-cloud-upload me-1"></i>Subir Documento
-    </a>
-  </div>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
 
   <% if (flash) { %>
-  <div class="alert alert-<%= flash.type === 'error' ? 'danger' : 'success' %> alert-dismissible fade show">
-    <%= flash.message %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <div class="mb-stack-lg px-stack-lg py-3 rounded-lg font-body-md text-body-md flex items-center justify-between <%= flash.type === 'error' ? 'bg-error-container/30 text-on-error-container' : 'bg-green-100 text-green-800' %>">
+    <span><%= flash.message %></span>
   </div>
   <% } %>
 
-  <!-- Stats cards -->
-  <div class="row g-3 mb-4">
-    <div class="col-6 col-md-3">
-      <div class="card stat-card border-0 shadow-sm h-100">
-        <div class="card-body text-center">
-          <div class="stat-icon bg-primary-subtle text-primary rounded-circle mx-auto mb-2">
-            <i class="bi bi-files fs-4"></i>
-          </div>
-          <h2 class="fw-bold mb-0"><%= stats.total || 0 %></h2>
-          <small class="text-muted">Total documentos</small>
-        </div>
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-stack-lg gap-stack-md">
+    <div>
+      <div class="flex items-center gap-stack-sm mb-1">
+        <span class="material-symbols-outlined text-primary">speed</span>
+        <h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Panel Principal</h1>
       </div>
+      <p class="font-body-md text-body-md text-on-surface-variant">Bienvenido, <%= session.userName %></p>
     </div>
-    <div class="col-6 col-md-3">
-      <div class="card stat-card border-0 shadow-sm h-100">
-        <div class="card-body text-center">
-          <div class="stat-icon bg-success-subtle text-success rounded-circle mx-auto mb-2">
-            <i class="bi bi-check-circle fs-4"></i>
-          </div>
-          <h2 class="fw-bold mb-0 text-success"><%= stats.vigentes || 0 %></h2>
-          <small class="text-muted">Vigentes</small>
-        </div>
+    <a href="/documents/upload" class="flex items-center justify-center gap-2 bg-primary-container text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all shadow-md">
+      <span class="material-symbols-outlined text-lg">upload</span>
+      Subir Documento
+    </a>
+  </div>
+
+  <!-- Summary Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-stack-lg">
+    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent hover:border-primary/20 transition-all flex flex-col items-center justify-center text-center group">
+      <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-primary text-2xl">description</span>
       </div>
+      <span class="font-headline-lg text-headline-lg text-on-background"><%= stats.total || 0 %></span>
+      <span class="font-label-md text-label-md text-on-surface-variant mt-1">Total documentos</span>
     </div>
-    <div class="col-6 col-md-3">
-      <div class="card stat-card border-0 shadow-sm h-100">
-        <div class="card-body text-center">
-          <div class="stat-icon bg-warning-subtle text-warning rounded-circle mx-auto mb-2">
-            <i class="bi bi-exclamation-triangle fs-4"></i>
-          </div>
-          <h2 class="fw-bold mb-0 text-warning"><%= stats.revocados || 0 %></h2>
-          <small class="text-muted">Revocados</small>
-        </div>
+    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent hover:border-green-500/20 transition-all flex flex-col items-center justify-center text-center group">
+      <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-green-600 text-2xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
       </div>
+      <span class="font-headline-lg text-headline-lg text-on-background"><%= stats.vigentes || 0 %></span>
+      <span class="font-label-md text-label-md text-on-surface-variant mt-1">Vigentes</span>
     </div>
-    <div class="col-6 col-md-3">
-      <div class="card stat-card border-0 shadow-sm h-100">
-        <div class="card-body text-center">
-          <div class="stat-icon bg-danger-subtle text-danger rounded-circle mx-auto mb-2">
-            <i class="bi bi-x-circle fs-4"></i>
-          </div>
-          <h2 class="fw-bold mb-0 text-danger"><%= stats.cancelados || 0 %></h2>
-          <small class="text-muted">Cancelados</small>
-        </div>
+    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent hover:border-yellow-500/20 transition-all flex flex-col items-center justify-center text-center group">
+      <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-yellow-600 text-2xl">warning</span>
       </div>
+      <span class="font-headline-lg text-headline-lg text-on-background"><%= stats.revocados || 0 %></span>
+      <span class="font-label-md text-label-md text-on-surface-variant mt-1">Revocados</span>
+    </div>
+    <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent hover:border-error/20 transition-all flex flex-col items-center justify-center text-center group">
+      <div class="w-12 h-12 rounded-full bg-error-container/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-error text-2xl">cancel</span>
+      </div>
+      <span class="font-headline-lg text-headline-lg text-on-background"><%= stats.cancelados || 0 %></span>
+      <span class="font-label-md text-label-md text-on-surface-variant mt-1">Cancelados</span>
     </div>
   </div>
 
-  <!-- Recent documents -->
-  <div class="card shadow-sm border-0">
-    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-      <h6 class="mb-0 fw-semibold"><i class="bi bi-clock-history me-2 text-primary"></i>Documentos Recientes</h6>
-      <a href="/documents" class="btn btn-sm btn-outline-primary">Ver todos</a>
+  <!-- Recent Documents Table -->
+  <section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+    <div class="flex items-center justify-between p-stack-lg border-b border-outline-variant">
+      <div class="flex items-center gap-stack-sm">
+        <span class="material-symbols-outlined text-primary">history</span>
+        <h2 class="font-headline-sm text-headline-sm text-on-surface">Documentos Recientes</h2>
+      </div>
+      <a href="/documents" class="px-4 py-1.5 border border-primary text-primary rounded-lg font-label-md text-label-md hover:bg-primary/5 transition-colors">
+        Ver todos
+      </a>
     </div>
-    <div class="card-body p-0">
-      <% if (!recent.length) { %>
-      <div class="text-center py-5 text-muted">
-        <i class="bi bi-inbox fs-1 d-block mb-2"></i>No hay documentos registrados aún.
-      </div>
-      <% } else { %>
-      <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-          <thead class="table-light">
-            <tr>
-              <th>Folio</th><th>Título</th><th>Tipo</th><th>Área</th><th>Fecha</th><th>Estado</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% recent.forEach(doc => { %>
-            <tr>
-              <td><code class="text-primary"><%= doc.folio %></code></td>
-              <td class="fw-semibold"><%= doc.title %></td>
-              <td><span class="badge bg-light text-dark border"><%= doc.document_type %></span></td>
-              <td><%= doc.issuing_area %></td>
-              <td><%= new Date(doc.created_at).toLocaleDateString('es-MX') %></td>
-              <td><%- statusBadge(doc.status) %></td>
-              <td>
-                <a href="/documents/<%= doc.folio %>" class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-eye"></i>
-                </a>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-      <% } %>
+
+    <% if (!recent.length) { %>
+    <div class="text-center py-16 text-on-surface-variant">
+      <span class="material-symbols-outlined text-5xl block mb-2">inbox</span>
+      No hay documentos registrados aún.
+    </div>
+    <% } else { %>
+    <div class="overflow-x-auto custom-scrollbar">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-surface-container-low">
+            <th class="px-stack-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Folio</th>
+            <th class="px-stack-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Título</th>
+            <th class="px-stack-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Tipo</th>
+            <th class="px-stack-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Área</th>
+            <th class="px-stack-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Fecha</th>
+            <th class="px-stack-lg py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Estado</th>
+            <th class="px-stack-lg py-4 text-right"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-outline-variant">
+          <% recent.forEach(doc => { %>
+          <tr class="hover:bg-surface-container-low transition-colors duration-150 group">
+            <td class="px-stack-lg py-4 font-body-md text-body-md text-primary font-medium"><%= doc.folio %></td>
+            <td class="px-stack-lg py-4 font-body-md text-body-md text-on-surface font-semibold"><%= doc.title %></td>
+            <td class="px-stack-lg py-4">
+              <span class="bg-surface-container px-3 py-1 rounded-full font-label-md text-label-md text-on-surface-variant"><%= doc.document_type %></span>
+            </td>
+            <td class="px-stack-lg py-4 font-body-md text-body-md text-on-surface-variant"><%= doc.issuing_area %></td>
+            <td class="px-stack-lg py-4 font-body-md text-body-md text-on-surface-variant"><%= new Date(doc.created_at).toLocaleDateString('es-MX') %></td>
+            <td class="px-stack-lg py-4"><%- statusPill(doc.status) %></td>
+            <td class="px-stack-lg py-4 text-right">
+              <a href="/documents/<%= doc.folio %>" class="p-2 text-outline hover:text-primary hover:bg-primary/10 rounded-lg transition-all inline-flex">
+                <span class="material-symbols-outlined">visibility</span>
+              </a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-surface-container py-8 mt-12 border-t border-outline-variant">
+  <div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop max-w-container-max mx-auto w-full gap-stack-md">
+    <div class="flex flex-col items-center md:items-start gap-stack-sm">
+      <span class="font-label-md text-label-md font-bold text-on-surface">DocuValidate</span>
+      <span class="font-label-md text-label-md text-secondary">© 2026 DocuValidate. Todos los derechos reservados.</span>
     </div>
   </div>
-</div>
+</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <%
-function statusBadge(s) {
+function statusPill(s) {
   const map = {
-    vigente:   '<span class="badge bg-success">Vigente</span>',
-    revocado:  '<span class="badge bg-warning text-dark">Revocado</span>',
-    cancelado: '<span class="badge bg-danger">Cancelado</span>',
+    vigente:   '<span class="bg-green-100 text-green-700 px-3 py-1 rounded-lg font-label-md text-label-md inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>Vigente</span>',
+    revocado:  '<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg font-label-md text-label-md inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-yellow-600"></span>Revocado</span>',
+    cancelado: '<span class="bg-error-container/30 text-error px-3 py-1 rounded-lg font-label-md text-label-md inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-error"></span>Cancelado</span>',
   };
   return map[s] || s;
 }
